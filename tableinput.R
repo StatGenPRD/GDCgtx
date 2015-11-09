@@ -132,8 +132,16 @@ models <- models[c("analysis","deps",  "model",	"groups",	"contrasts","cvlist")]
 names(models) <- c("model", "deps", "fun", "groups", "contrasts","cvlist")
 
 
+## Determine if user has specified stop.before.make
+if(!is.null(config["stop.before.make", 2]) & !is.na(config["stop.before.make", 2])) {
+  stop.before.make = config["stop.before.make", 2]
+} else {
+  stop.before.make = FALSE
+}
+
+
 gtxpipe(gtxpipe.derivations = rbind(derivations.standard.IDSL, deriv),
         gtxpipe.groups = groups,
         gtxpipe.models = models, 
-        gtxpipe.eigenvec = config["eigenvec",2])
-        #, stop.before.make = TRUE
+        gtxpipe.eigenvec = config["eigenvec",2],
+        stop.before.make = stop.before.make)

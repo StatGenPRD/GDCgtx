@@ -25,10 +25,16 @@ eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456
 
 ##ANALYSIS CONFIGURATION
 
+
+## Marker filters - one reason to adjust these is to remove variants likely to be poorly imputated to avoid inflation of lambda and cause over-correction of results for well imputed variants.
 #Marker exclusion criteria for genome-wide analysis (these are bypassed for candidate variant analysis)
 threshold.MAF=0.01
 #Note Rsq is calculated based on doses of analyzable subjects (non-missing co-variates and endpoints, those in group) and won't necessarily match the Rsq reported in the minimac info file.
 threshold.Rsq=0.01
+
+
+
+
 
 
 ########
@@ -47,4 +53,8 @@ threshold.Rsq=0.01
 
 ##Absolute path to gtx package if other than default (e.g. if testing a new feature in latest version of package before the default controlled instance his upgraded)
 #gtxloc=/path/to/R/lib
-gtxloc=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0
+
+
+##Stop before running chunk analyses to allow inspection of setup
+#stop.before.make=TRUE
+

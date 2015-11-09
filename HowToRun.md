@@ -18,6 +18,8 @@ This document provides instructions on how to run the routine PGx analysis pipel
 	- [models.txt](#models)
 	- [config.txt](#config)
 - [Run analyses](#Run)
+	-[Check setup](#Check)
+	-[Submit run](#Submit)
 - [Monitoring progress](#Monitor)
 - [Review results](#Review)
 	- [Analysis/Group results](#GroupResults)
@@ -195,6 +197,18 @@ See the example [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/co
 
 ## <a name="Run">Run analyses</a>
 
+### <a name="Check">Check setup</a>
+It is a good idea to check that the pipeline is interpretting your configuration and data correctly by running all the "setup" prior to the chunk analyses. Do this by setting 
+```
+stop.before.make=TRUE
+```
+in [config.txt](#config). Then [submit](#Submit) and the job should finish in a few minutes so you can quickly [review](#Review). If everything looks good, reset
+```
+#stop.before.make=TRUE
+```
+and [re-submit](#Submit).
+
+### <a name="Submit">Submit run</a>
 Once everything has been configured, you can start your analyses by submitting the following command
 ```
 /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/qsub.sh Label Email Workspace
