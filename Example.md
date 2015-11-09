@@ -70,7 +70,7 @@ Check to confirm the directory structure looks like this:
 
 5 directories, 18 files
 ```
-If there are exta files, then either another user is currently testing or completed testing but failed to reset the workspace. Check the owner of the files and follow up with that user.
+If there are extra files, then either another user is currently testing or completed testing but failed to reset the workspace. Check the owner of the files and follow up with that user.
 
 If there are missing files, please check with an administrator to restore these from the GitHub repository.
 

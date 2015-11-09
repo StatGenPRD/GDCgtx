@@ -175,7 +175,7 @@ This file is used to define the model for each analysis and optional contrasts.
 
 ```model``` : The model statement. Note, PCs as specified in [config.txt](#config) will be included as covariates by default for every analysis.
 
-```groups``` : The label(s) of the group(s) in which this analysis should be conducted as defined in ```groups.txt```.
+```groups``` : The label(s) of the group(s) in which this analysis should be conducted as defined in ```groups.txt```. Note, not all groups in the conrasts need to be specified, any groups in the contrasts not listed here will automatically be analysed. Including here will indicate the results from the group alone should be reported which will inflate the multiple-testing correction. See the [results from the example analysis](https://github.com/StatGenPRD/GDCgtx/blob/master/Example.md) where the Placebo group is not specified in the model for SafetyQTA1 so the significance threshold is only half that of the Baseline analysis because there are two tests - Drug and the Drug/Placebo contrast while the Baseline analysis only had one test - the All group. If you were to include the Placebo in the groups field of SafetyQTA1 like ```Drug Placebo```, you would see the significance threshold decrease to a third of the Baseline analysis because there would be three tests - Drug, Placebo, and Drug/Placebo contrast.
 
 ```cvlist``` : Optional, the name of the candidate variant list used for this analysis. Usually ```cvlist.txt```.
 
