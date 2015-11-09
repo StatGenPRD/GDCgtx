@@ -1,0 +1,21 @@
+USUBJID	SEX	AGE	RACE	ETHNIC
+CEPH.NA06985	M	25	White	Not Hispanic
+CEPH.NA06993	F	23	Asian	Not Hispanic
+CEPH.NA06994	M	22	African	Not Hispanic
+CEPH.NA07000	F	35	African	Hispanic
+CEPH.NA07022	M	42	White	Not Hispanic
+CEPH.NA07055	F	.	White	Not Hispanic
+CEPH.NA07056	M	55	White	Not Hispanic
+CEPH.NA07345	F	65	Asian	Not Hispanic
+CEPH.NA07357	M	18	African	Not Hispanic
+CEPH.NA10845	F	47	Mixed	Hispanic
+CEPH.NA11829	M	37	White	Hispanic
+CEPH.NA11830	M	21	White	Hispanic
+CEPH.NA11831	F	24	White	Not Hispanic
+CEPH.NA11832	M	26	White	Not Hispanic
+CEPH.NA11839	F	25	White	Not Hispanic
+CEPH.NA11840	M	30	White	Not Hispanic
+CEPH.NA11881	F	33	White	Not Hispanic
+CEPH.NA11882	M	41	White	Not Hispanic
+CEPH.NA11992	F	42	White	Not Hispanic
+CEPH.NA11993	F	56	White	Not Hispanic

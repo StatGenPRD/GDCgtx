@@ -1,0 +1,46 @@
+########
+##REQUIRED - THESE MUST/SHOULD BE SPECIFIED
+########
+
+##PROJECT INFORMATION
+
+#project label for use in reports
+project=Example Analysis Study ABC123456
+
+#absolute path to workspace
+workingdir=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis
+
+#analyst name & e-mail for use in reports
+user=FirstName LastName
+email=name@PAREXEL.com
+
+
+##DATA
+#absolute path to directory with all *.dose.gz and *.info.gz files including HIBAG results
+genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/imputed-20120314
+
+#absolute path to file containing eigenvectors from pre-imputation QC (should be provided by data scientist)
+eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/genotypes/ABC123456-pca.eigenvec
+
+
+##ANALYSIS CONFIGURATION
+
+#Marker exclusion criteria for genome-wide analysis (these are bypassed for candidate variant analysis)
+threshold.MAF=0.01
+#Note Rsq is calculated based on doses of analyzable subjects (non-missing co-variates and endpoints, those in group) and won't necessarily match the Rsq reported in the minimac info file.
+threshold.Rsq=0.01
+
+
+########
+##OPTIONAL - THESE MAY BE SPECIFIED AS NEEDED
+########
+
+##aboslute path to directory containing clinical datasets (this replaces the default workingdir/input)
+#clinical=/path/to/share/StudyID/AnalysisReadyData/ClinicalData/
+
+##names of the expected input files if not the defaults
+#phenofile=Pheno_alt.txt
+#varfile=variables_new.txt
+#groupfile=groups_old.txt
+#modelfile=models_justone.txt
+

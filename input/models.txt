@@ -1,0 +1,7 @@
+analysis	model	groups	cvlist	contrasts
+Baseline	lm(Pheno.blalt ~ demo.AGE + demo.SEX)	All	cvlist.txt
+SafetyQTA1	lm(Pheno.log10maxalt ~ 1)	Drug	cvlist.txt	Drug/Placebo
+SafetyQTA2	lm(Pheno.log10maxalt ~ Pheno.blalt + demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo
+SafetyCC	glm(Pheno.altcc ~ 1, family="binomial")	Drug	cvlist.txt	Drug/Placebo
+Efficacy1	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ 1)	Drug	cvlist.txt	Drug/Placebo
+Efficacy2	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo

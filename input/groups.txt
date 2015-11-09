@@ -1,0 +1,4 @@
+group	deps	fun
+Drug	pop.PNITT pop.TRTGRP	pop.PNITT & pop.TRTGRP == "Drug"
+Placebo	pop.PNITT pop.TRTGRP	pop.PNITT & pop.TRTGRP == "Placebo"
+All	pop.PNITT pop.TRTGRP	pop.PNITT & pop.TRTGRP %in% c("Placebo", "Drug")
