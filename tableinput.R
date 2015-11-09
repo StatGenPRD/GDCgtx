@@ -19,7 +19,15 @@ options(gtxpipe.project = config["project", 2])
 options(gtxpipe.user = config["user", 2])
 options(gtxpipe.email = config["email", 2])
 
-.libPaths("/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0")
+
+## Set location of gtx library
+if (!is.null(config["gtxloc", 2]) & !is.na(config["gtxloc", 2])) {
+  gtxloc = config["gtxloc",2]
+} else {
+  gtxloc = "/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0"
+}
+
+.libPaths(gtxloc)
 
 library(gtx)
 
@@ -44,7 +52,7 @@ options(gtxpipe.genotypes = config["genotypes",2])
 ## use the following option instead:
 #options(gtxpipe.make = "qmake -cwd -v PATH -v R_LIBS_USER=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0 -l qname=dl580 -l arch=lx24-amd64 -- -j 400")
 #options(gtxpipe.make = "qmake -cwd -v SGE_DEBUG_LEVEL=\"3 0 0 0 0 0 0 0\" -v PATH -v R_LIBS_USER=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0 -l qname=dl580 -l arch=lx24-amd64 -- -j 400")
-options(gtxpipe.make = "/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0 -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100")
+options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
 
 
 options(gtxpipe.threshold.MAF = as.numeric(as.character(config["threshold.MAF", 2])))

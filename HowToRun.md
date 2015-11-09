@@ -234,7 +234,7 @@ If there aren't a lot of running jobs from other users, then the queues may be i
    dl580                BIP   0/0/12
    dl580                BIP   0/0/12
 ```
-Where the lack of E afer the N/N/N indicates the queues are fine. If several are in E state, e-mail R&D_IT_Infra_Services@gsk.com and ask to reset. Be sure to include a screen cap of what you have observed and note that you are on the us1us0168 server.
+Where the lack of E afer the N/N/N indicates the queues are fine. If several are in E state, e-mail R&amp;D_IT_Infra_Services@gsk.com and ask to reset. Be sure to include a screen cap of what you have observed and note that you are on the us1us0168 server.
 
 
 
