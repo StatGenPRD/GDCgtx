@@ -18,8 +18,8 @@ This document provides instructions on how to run the routine PGx analysis pipel
 	- [models.txt](#models)
 	- [config.txt](#config)
 - [Run analyses](#Run)
-	-[Check setup](#Check)
-	-[Submit run](#Submit)
+	- [Check setup](#Check)
+	- [Submit run](#Submit)
 - [Monitoring progress](#Monitor)
 - [Review results](#Review)
 	- [Analysis/Group results](#GroupResults)
@@ -133,7 +133,7 @@ See the example file [here](https://github.com/StatGenPRD/GDCgtx/blob/master/inp
 
 
 ### <a name="variables">variables.txt</a>
-This file is used to define endpoints, covariates, and variables used to define subgroups. The required variables from [pop.txt](#pop) and [demo.txt](#demo) are defined by default. Eigenvectors also do no need to be specified here.
+This file is used to define endpoints, covariates, and variables used to define subgroups. The required variables from [pop.txt](#pop) and [demo.txt](#demo) are defined by default. Eigenvectors (PCs) also do no need to be specified here as they are included in [config.txt](#config).
 
 ```variable``` : The label of the variable which will be used in reports. It should be a succinct alphanumeric value and follow the convention of DataSetName.VariableName like ```Pheno.maxalt```. The default definition of the required variables from [pop.txt](#pop) and [demo.txt](#demo) will follow this convention (e.g. ```demo.AGE```) and can be referenced as such in [groups.txt](#groups) and [models.txt](#models).
 
@@ -173,7 +173,7 @@ This file is used to define the model for each analysis and optional contrasts.
 
 ```analysis``` : The label of the analysis which will be used in reports, directories, and filenames. It should be a succinct alphanumeric value.
 
-```model``` : The model statement.
+```model``` : The model statement. Note, PCs as specified in [config.txt](#config) will be included as covariates by default for every analysis.
 
 ```groups``` : The label(s) of the group(s) in which this analysis should be conducted as defined in ```groups.txt```.
 
@@ -191,7 +191,8 @@ This file contains all the high-level (cross-analysis) key-value options. Commen
 threshold.MAF	0.05
 threshold.Rsq	0.5
 ```
-See the example [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/config.txt) for a full listing of accepted options.
+
+This is also where the eigenvectors (PCs) are specified. See the example [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/config.txt) for a full listing of accepted options.
 
 
 
@@ -206,7 +207,7 @@ in [config.txt](#config). Then [submit](#Submit) and the job should finish in a 
 ```
 #stop.before.make=TRUE
 ```
-and [re-submit](#Submit).
+in [config.txt](#config) and [re-submit](#Submit).
 
 ### <a name="Submit">Submit run</a>
 Once everything has been configured, you can start your analyses by submitting the following command

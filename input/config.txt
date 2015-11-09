@@ -20,6 +20,9 @@ email=name@PAREXEL.com
 genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/imputed-20120314
 
 #absolute path to file containing eigenvectors from pre-imputation QC (should be provided by data scientist)
+#Note, these are used by default as covariates for all analyses
+#You may omit these by commenting out the line but beware that this is the only "view" into the genetic data prior to running the chunk analyses
+#And therefore, the subject demographic summaries (which are calculated before the chunk analyses) will report PGxITT as ITT which is almost certainly false.
 eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/genotypes/ABC123456-pca.eigenvec
 
 
