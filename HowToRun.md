@@ -30,6 +30,7 @@ This document provides instructions on how to run the routine PGx analysis pipel
 		- [New configurations](#NewConfig)
 		- [Changed configurations](#ChangeConfig)
 	- [Killing jobs in progress](#Kill)
+- [Validation](#Validation)
 
 
 	
@@ -107,7 +108,7 @@ This file is based on the IDSL AR pop dataset and must contain at least the foll
 ```
 STUDYID  TRTGRP  ATRTGRP  PNITT  USUBJID
 ```
-If your data scientist has delivered an IDSL AR pop dataset with the AnalysisReadyData, you can either add a symbolic link in the input directory to the file. If it is a CDISC ADaM dataset, use the following variables, respectively:
+If your data scientist has delivered an IDSL AR pop dataset with the AnalysisReadyData, you can  add a symbolic link in the input directory to the file. If it is a CDISC ADaM dataset, use the following variables, respectively:
 ```
 ADSL.STUDYID  ADSL.TRTP  ADSL.TRTA  ADSL.ITTFL  ADSL.USUBJID
 ```
@@ -119,7 +120,7 @@ This file is based on the IDSL AR demo dataset and must contain at least the fol
 ```
 SEX  AGE  RACE  ETHNIC  USUBJID
 ```
-If your data scientist has delivered an IDSL AR demo dataset with the AnalysisReadyData, you can either add a symbolic link in the input directory to the file . If it is a CDISC ADaM dataset, use the following variables, respectively:
+If your data scientist has delivered an IDSL AR demo dataset with the AnalysisReadyData, you can add a symbolic link in the input directory to the file. If it is a CDISC ADaM dataset, use the following variables, respectively:
 ```
 ADDM.SEX  ADDM.AGE  ADDM.RACE  ADDM.ETHNIC  ADDM.USUBJID
 ```
@@ -127,7 +128,7 @@ ADDM.SEX  ADDM.AGE  ADDM.RACE  ADDM.ETHNIC  ADDM.USUBJID
 See the example file [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/demo.txt).
 
 ### <a name="pheno">Pheno.txt</a>
-This file contains all the remaining subject-level values that will be used as covariates or endpoints in your model statements. These values will be read as-is so, any derivations or transformations should occur before they are put in this file unless you are comfortable with R syntax and can define using the ```fun``` column in [variables.txt](#variables). It must contain ```USUBJID```.
+This file contains all the remaining subject-level values that will be used as covariates or endpoints in your model statements. These values will be read as-is so, any derivations or transformations should occur before they are put in this file unless you are comfortable with R syntax and can define using the ```fun``` column in [variables.txt](#variables). It must contain ```USUBJID```. Note, Eigenvectors (PCs) are not specified here, they are specified in [config.txt](#config).
 
 See the example file [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/Pheno.txt).
 
@@ -175,21 +176,21 @@ This file is used to define the model for each analysis and optional contrasts.
 
 ```model``` : The model statement. Note, PCs as specified in [config.txt](#config) will be included as covariates by default for every analysis.
 
-```groups``` : The label(s) of the group(s) in which this analysis should be conducted as defined in ```groups.txt```. Note, you do not need to specify groups for which you are only interested in contrasts; any groups in the contrasts not listed here will automatically be analysed. Including here will indicate the results from the group alone should be reported and the multiple-testing correction will be adjusted accordingly. See the [results from the example analysis](https://github.com/StatGenPRD/GDCgtx/blob/master/Example.md) where the Placebo group is specified in the model for SafetyQTA1 but not for SafetyQTA2 so the calculated significance thresholds are lower for SafetyQTA1 than for SafetyQTA2.
+```groups``` : Space separated list of labels of the groups in which this analysis should be conducted as defined in ```groups.txt```. Note, you do not need to specify groups for which you are only interested in contrasts; any groups in the contrasts not listed here will automatically be analysed. Including here will indicate the results from the group alone should be reported and the multiple-testing correction will be adjusted accordingly. See the [results from the example analysis](https://github.com/StatGenPRD/GDCgtx/blob/master/Example.md) where the Placebo group is specified in the model for SafetyQTA1 but not for SafetyQTA2 so the calculated significance thresholds are lower for SafetyQTA1 than for SafetyQTA2. Similarly, no groups are specified for Efficacy1, only the contrast, so the calculated significance thresholds are higher than for Efficacy2 where both the Drug group and contrast are tested.
 
 ```cvlist``` : Optional, the name of the candidate variant list used for this analysis. Usually ```cvlist.txt```.
 
-```contrasts``` : Optional, the contrasts to consider of the form ```group1/group2``` where the ```group1``` and ```group2``` are labels defined in ```groups.txt```.
+```contrasts``` : Optional, space separated list of contrasts to consider of the form ```group1/group2``` where the ```group1``` and ```group2``` are labels defined in ```groups.txt```.
 
 See the example [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/models.txt).
 
 
 ### <a name="config">config.txt</a>
-This file contains all the high-level (cross-analysis) key-value options. Comment lines can be pre-fixed with ```#```. All other non-blank lines will be interpretted as a tab separated key-value pair like: 
+This file contains all the high-level (cross-analysis) key-value options. Comment lines can be pre-fixed with ```#```. All other non-blank lines will be interpretted as an ```=``` key-value pair like: 
 ```
 #filtering criteria
-threshold.MAF	0.05
-threshold.Rsq	0.5
+threshold.MAF=0.05
+threshold.Rsq=0.5
 ```
 
 This is also where the eigenvectors (PCs) are specified. See the example [here](https://github.com/StatGenPRD/GDCgtx/blob/master/input/config.txt) for a full listing of accepted options.
@@ -227,9 +228,9 @@ You will know the analyses are complete when you receive an e-mail from root [ro
 
 Until this happens, it is a good idea to check the SGE queue periodically to confirm that your jobs are running at the rate expected (ideally 100 jobs at a time). Use the following command:
 ```
-qstat -u mudID
+qstat
 ```
-where ```mudID``` is your user ID. State of r indicates running, q or T indicates queued. E indicates something is wrong, check with an administrator.
+State of r indicates running, q or T indicates queued. E indicates something is wrong, check with an administrator.
 
 If it appears too many of your jobs are queued and not enough running, check to see how busy the queue is:
 ```
@@ -260,7 +261,7 @@ A good place to start in the review is the "final" report
 ```
 Analysis\outputs\report-short.hmtl
 ```
-The first thing to check is that this file exists and contains 3 tables (groups, subjects, analysis results). You can open this file in Word to edit towards the final CSR insert and/or convert to PDF.
+The first thing to check is that this file exists and contains 3 tables (groups, subjects, analysis results). You can open this file in Word to edit towards the final CSR insert and/or convert to PDF. By default, it will open in "Web Layout", go to the View tab on the ribbon to switch to the more familiar Print Layout. Note, the candidate variant results are not handled separately; they are embedded in the genome-wide results and thus contribute to the genomic control coefficient and are corrected as described under table3.
 
 If anything seems wrong with the contents of this report but the exit status was 0, then it will require some investigation as the cause is likely in the source data / analysis setup.
 
@@ -300,7 +301,20 @@ If everything executed as expected, then you should find the following files in 
 Below are some tips for re-running under different scenarios:
 
 ### <a name="FailedJobs">Failed jobs</a>
-If any of the chunk child-jobs were interrupted for any reason (e.g. server goes down), you can resume the analysis where it left off by ... BE SURE TO ADDRESS OVERWRITING OF OUT/ERR/LOG Files
+If any of the chunk child-jobs failed to complete for any reason (e.g. server goes down), you can resume the analysis where it left off by
+1. Waiting for the entire submission to complete (you receive the notification e-mail from root). For example, if you know some chunk jobs were interrupted because a server went down but other chunk jobs are still running on other servers, re-submitting before all the other jobs complete will result in a race condition as the re-submission will attempt to analyze everything that has yet to complete including the chunks that are still running under the original submission.
+2. Retaining the  stderr and stdout files from the prior run. Suggest re-naming these files which will be in the workspace as follows
+```
+mv Makefile Makefile.0
+mv Makefile.err Makefile.err.0
+mv Makefile.out Makefile.out.0
+mv gtx.err gtx.err.0
+mv gtx.out gtx.out.0
+```
+where the .0 can be incremented accordingly if need to re-submit several times (i.e. the files associated with the initial submission will be .0, those associated with the first re-submission will be .1, etc).
+3. Re-submit exactly like the [original submission](#Submit)
+
+
 
 ### <a name="EditConfig">Edited analysis configuration</a>
 If you have decided to change the analysis configuration, the type of change will dictate how to proceed. 
@@ -309,7 +323,7 @@ If you have decided to change the analysis configuration, the type of change wil
 If you only added new configurations (variables, groups, models, contrasts) and did not change any existing data or settings, then you can follow the instructions for a [failed job](#FailedJobs). The pipeline will  detect that the chunk results for the new analysis/group(s) are missing and analyze those while leaving the existing results intact. Contrasts are the exception - you may change contrasts and still take this approach as the contrasts do not affect how the chunk analyses are conducted, they are calculated during results tabulation which is always re-run.
 
 #### <a name="ChangeConfig">Changed configurations</a>
-If you changed any of the data or settings, then the existing chunk analysis results need to be discarded so the pipeline knows to re-run the analyses under the new conditions. **_With caution_**, you can "target" this discarding to only the analyis/group(s) that are affected by the changes but it is safest to discard all. To "target", delete the relevant ```analyses/analysis/group``` directory and the QQ and Manhattan plots. The safe approach is to delete everything in the ```Analysis``` directory except for your ```input``` directory.
+If you changed any of the data or settings, then the existing chunk analysis results need to be discarded so the pipeline knows to re-run the analyses under the new conditions. **_With caution_**, you can "target" this discarding to only the analyis/group(s) that are affected by the changes but it is safest to discard all. To "target", delete the relevant ```analyses/analysis/group``` directories and the QQ and Manhattan plots then follow the instructions for a [failed job](#FailedJobs) to resubmit. The safe approach is to delete everything in the workspace except for your ```input``` directory and then resubmit exactly like the [original submission](#Submit).
 
 ### <a name="Kill">Killing jobs in progress</a>
 If you realize there is something wrong with your setup while the pipeline is running, you can kill all of your jobs with this command
@@ -320,5 +334,7 @@ where ```mudID``` is your user ID. Note, this will terminate all SGE jobs you ha
 
 
 
+## <a name="Validation">Validation</a>
+Validation or results should consist of an independent scientist replicating a selection of results in SAS.
 
 

@@ -27,8 +27,10 @@ eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456
 ## ANALYSIS CONFIGURATION
 
 
-## Marker filters - one reason to adjust these is to remove variants likely to be poorly imputated to avoid inflation of lambda and cause over-correction of results for well imputed variants.
-#Marker exclusion criteria for genome-wide analysis (these are bypassed for candidate variant analysis)
+## Marker filters
+## One reason to adjust these is to remove variants likely to be poorly imputated to avoid inflation of the genomic control coefficient (lambda) and cause over-correction of results for well imputed variants.
+## More stringent filters will also improve runtime as fewer markers will need to be analyzed
+## These filters are bypassed for candidate variants so assuming all your candidate variants are in the dataset, all will be analyzed and the multiple-testing correction based on the lenght of the candidate variant list will be appropriate.
 threshold.MAF=0.01
 #Note Rsq is calculated based on doses of analyzable subjects (non-missing co-variates and endpoints, those in group) and won't necessarily match the Rsq reported in the minimac info file.
 threshold.Rsq=0.01
