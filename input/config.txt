@@ -1,21 +1,19 @@
 ########
-##REQUIRED - THESE MUST/SHOULD BE SPECIFIED
+## REQUIRED - THESE MUST/SHOULD BE SPECIFIED
 ########
 
-##PROJECT INFORMATION
+## PROJECT INFORMATION
 
 #project label for use in reports
 project=Example Analysis Study ABC123456
-
-#absolute path to workspace
-workingdir=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis
 
 #analyst name & e-mail for use in reports
 user=FirstName LastName
 email=name@PAREXEL.com
 
 
-##DATA
+## DATA
+
 #absolute path to directory with all *.dose.gz and *.info.gz files including HIBAG results
 genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/imputed-20120314
 
@@ -26,7 +24,7 @@ genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC12345
 eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/genotypes/ABC123456-pca.eigenvec
 
 
-##ANALYSIS CONFIGURATION
+## ANALYSIS CONFIGURATION
 
 
 ## Marker filters - one reason to adjust these is to remove variants likely to be poorly imputated to avoid inflation of lambda and cause over-correction of results for well imputed variants.
@@ -44,8 +42,9 @@ threshold.Rsq=0.01
 ##OPTIONAL - THESE MAY BE SPECIFIED AS NEEDED
 ########
 
-##aboslute path to directory containing clinical datasets (this replaces the default workingdir/input)
+##aboslute path to directory containing clinical datasets (this replaces the default "input")
 #clinical=/path/to/share/StudyID/AnalysisReadyData/ClinicalData/
+
 
 ##names of the expected input files if not the defaults
 #phenofile=Pheno_alt.txt
@@ -54,7 +53,7 @@ threshold.Rsq=0.01
 #modelfile=models_justone.txt
 
 
-##Absolute path to gtx package if other than default (e.g. if testing a new feature in latest version of package before the default controlled instance his upgraded)
+##Absolute path to gtx package if other than default (e.g. if testing a new feature in latest version of package before the default controlled instance has been upgraded)
 #gtxloc=/path/to/R/lib
 
 

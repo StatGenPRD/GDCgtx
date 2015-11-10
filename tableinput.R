@@ -1,17 +1,17 @@
 options(echo = FALSE)
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) >=1) {
-  file.config <- args[1]
+  work.dir <- args[1]
 } else {
-  stop("Please input [config file]")
+  stop("Please input [working directory]")
 }
+file.config = file.path(work.dir,"input/config.txt")
 print (paste(Sys.time(), "Loading", file.config))
 
 config <- read.table(file.config, sep ="=", as.is = T, strip.white = TRUE,stringsAsFactors = FALSE, quote = "")
 rownames(config) <- config[[1]]
 
-if(!is.null(config["workingdir", 2]) & !is.na(config["workingdir", 2]))
-  setwd(config["workingdir", 2])
+setwd(work.dir)
 
 ## Options for project title, author name, author email
 ## (Note these are not used by the current pipeline code)
