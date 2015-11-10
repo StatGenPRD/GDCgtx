@@ -1,4 +1,5 @@
 #!/bin/bash
 
-rm -fR /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis/*
-ln -s /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/input /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis/input
+rm -fR ABC123456/Analysis/*
+cd ABC123456/Analysis
+ln -s ../../input input
