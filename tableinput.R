@@ -127,6 +127,9 @@ for (i in 1:nrow(models)) {
   if (is.na(models[i,"contrasts"]) || is.null(models[i,"contrasts"])) {
     models[i,"contrasts"] = ""
   }
+  if (is.na(models[i,"groups"]) || is.null(models[i,"groups"])) {
+    models[i,"groups"] = ""
+  }
 }
 models <- models[c("analysis","deps",  "model",	"groups",	"contrasts","cvlist")]
 names(models) <- c("model", "deps", "fun", "groups", "contrasts","cvlist")
