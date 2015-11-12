@@ -1,8 +1,8 @@
 variable	descriptor	types	data
-Pheno.maxalt	"ALT, xULN, maximun on treatment"	double	Pheno
-Pheno.log10maxalt 	"log10ALT, xULN, maximun on treatment"	double	Pheno
-Pheno.blalt 	"ALT, xULN, baseline"	double	Pheno
+Pheno.maxalt	ALT, xULN, maximun on treatment	double	Pheno
+Pheno.log10maxalt 	log10ALT, xULN, maximun on treatment	double	Pheno
+Pheno.blalt 	ALT, xULN, baseline	double	Pheno
 Pheno.altcc 	 ALT cases and controls	integer	Pheno
-Pheno.SRVMO 	"Survival, months"	double	Pheno
-Pheno.SRVCFLCD 	"Censoring flag for survival code, 0 for censor, 1 for event"	integer	Pheno
+Pheno.SRVMO 	Survival, months	double	Pheno
+Pheno.SRVCFLCD 	Censoring flag for survival code, 0 for censor, 1 for event	integer	Pheno
 Pheno.USUBJID 	Unique subject ID	character	Pheno
