@@ -1,4 +1,12 @@
+
+## This script reads and processes the config.txt and associated files to setup and execute 
+## the call to gtxpipe which is the main driver function of the gtx package
+
+# Don't echo script to stdout
 options(echo = FALSE)
+
+# There is one expected argument, the working directory where input/config.txt is expected
+
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) >=1) {
   work.dir <- args[1]
@@ -6,12 +14,21 @@ if (length(args) >=1) {
   stop("Please input [working directory]")
 }
 file.config = file.path(work.dir,"input/config.txt")
+
+# print strating time and config file path to stdout
 print (paste(Sys.time(), "Loading", file.config))
 
+# Read config file as list of key-value pairs separated by =
 config <- read.table(file.config, sep ="=", as.is = T, strip.white = TRUE,stringsAsFactors = FALSE, quote = "")
+# Set rownames as key values (column1)
 rownames(config) <- config[[1]]
 
+# We are assuming the specified working directory with input/config is also where the log files and results should be.
+# If a user wishes to "re-run" an existing input/config in a different working directory (i.e. to leave original results intact),
+# they should setup their new working directory to have a symbolic link named "input" that points to the original input directory
+# instead of trying to support the ability to separately specify an input path and workingdir / output path
 setwd(work.dir)
+
 
 ## Options for project title, author name, author email
 ## (Note these are not used by the current pipeline code)
@@ -20,48 +37,51 @@ options(gtxpipe.user = config["user", 2])
 options(gtxpipe.email = config["email", 2])
 
 
-## Set location of gtx library
+## Get location of gtx library and load
 if (!is.null(config["gtxloc", 2]) & !is.na(config["gtxloc", 2])) {
   gtxloc = config["gtxloc",2]
 } else {
   gtxloc = "/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0"
 }
 
+## If using Rstudio instead of local R3 where dependent packages are loaded, need to add library
+#.libPaths("/GWD/appbase/projects/statgen/GXapp/R3.0.0/R-3.0.0/library")
 .libPaths(gtxloc)
-
 library(gtx)
 
-## Clinical data (.txt exports from SAS) are in the default location
-## "workingdir/input".  If in a different location, this should be specified
-## with an option like:
+
+## Get location of clinical data (.txt exports from SAS) it not the default input/
 if (!is.null(config["clinical", 2]) & !is.na(config["clinical", 2])) {
   options(gtxpipe.clinical = config["clinical",2])
 } else {
-  options(gtxpipe.clinical = file.path(getwd(), "input"))
+  options(gtxpipe.clinical = file.path(work.dir, "input"))
 }
 
-## Default location for genotype data (.dose.gz and .into.gz from
-## minimac) are not in the default location "genotypes", hence need to
-## specify the location with an option:
+
+## Set the location of the genetic data
 options(gtxpipe.genotypes = config["genotypes",2])
 
-## System specific command to run make must be specified with an
-## option.  Parallel make with 4 threads on the current host:
-#options(gtxpipe.make = "make -j 4")
-## To use distributed parallel make with 64 threads on GSK systems,
-## use the following option instead:
-#options(gtxpipe.make = "qmake -cwd -v PATH -v R_LIBS_USER=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0 -l qname=dl580 -l arch=lx24-amd64 -- -j 400")
-#options(gtxpipe.make = "qmake -cwd -v SGE_DEBUG_LEVEL=\"3 0 0 0 0 0 0 0\" -v PATH -v R_LIBS_USER=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/R-packages/x86_64-unknown-linux-gnu-library/3.0 -l qname=dl580 -l arch=lx24-amd64 -- -j 400")
+
+## Set the make command to use for executing the chunk analysis jobs
+
+## To use distributed parallel make (SGE) with 100 threads on GSK systems,
 options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
+## Same as above but an extra level of output for debugging
+#options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v ", '-v SGE_DEBUG_LEVEL=\"3 0 0 0 0 0 0 0\"', " R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
+
+## Parallel make with 4 threads on the current host:
+## Note, this approach has not been fully tested and configured (e.g. specifying R_LIBS_USER)
+#options(gtxpipe.make = "make -j 4")
 
 
+## Set marker filter thresholds
 options(gtxpipe.threshold.MAF = as.numeric(as.character(config["threshold.MAF", 2])))
 options(gtxpipe.threshold.Rsq = as.numeric(as.character(config["threshold.Rsq", 2])))
 
-## Some standard derivations and descriptors are provided by a data object within the 'gtx' package (demo and pop)
+## Some standard derivations and descriptors are provided by a data object within the gtx package (demo and pop)
 data(derivations.standard.IDSL) # provides derivations.standard.IDSL and descriptors.standard.IDSL
 
-## All other variables need to be defined & derived - read from table
+## All other variables need to be defined & derived - read from tab-delimited table
 if(!is.null(config["varfile", 2]) & !is.na(config["varfile", 2])) {
   vartable = file.path(getOption("gtxpipe.clinical"), config["varfile",2])
 } else {
@@ -70,6 +90,7 @@ if(!is.null(config["varfile", 2]) & !is.na(config["varfile", 2])) {
 
 vars <- read.table(vartable, sep = "\t", 
                    as.is = T, header = T, strip.white = TRUE, quote = "")
+
 ## Add descriptors for project specific variables.  Note this is
 ## encoded in an option, not an argument to gtxpipe(), 
 ## because this is used by all pipeline functions to prettify output
@@ -82,20 +103,21 @@ options(clinical.descriptors =
           c(descriptors.standard.IDSL,
             descriptors.list))
 
-#Read derivations from a table in a file
-#Assumes tab-delimited (e.g. saved from Excel)
-deriv<- vars[!names(vars) %in% "descriptor"]
-names(deriv)<- gsub("variable", "targets", names(deriv))
-deriv$deps <-unlist(lapply(deriv$targets, function(str){
+
+derivs<- vars[!names(vars) %in% "descriptor"]
+names(derivs)<- gsub("variable", "targets", names(derivs))
+derivs$deps <-unlist(lapply(derivs$targets, function(str){
                     return (unlist(strsplit(str, ".", fixed = T))[1])}))
-if(!"fun" %in% names(deriv))
-  deriv$fun <- paste("valuesof(", 
-                     unlist(lapply(deriv$targets, function(str){
+## By default, use valuesof function to use the clinical data as-is
+## Need to amend so will apply whenever fun value is empty instead of only when fun column is missing
+if(!"fun" %in% names(derivs))
+  derivs$fun <- paste("valuesof(", 
+                     unlist(lapply(derivs$targets, function(str){
                             return (paste(unlist(strsplit(str, ".", fixed = T))[-1], collapse = ".", sep = ""))})), 
                     ")", sep = "")
 
-#Read group definitions from a table in a file
-#Assumes tab-delimited (e.g. saved from Excel)
+## Read group definitions from a table in a file
+## Assumes tab-delimited
 if(!is.null(config["groupfile", 2]) & !is.na(config["groupfile", 2])) {
   grouptable = file.path(getOption("gtxpipe.clinical"), config["groupfile",2])
 } else {
@@ -105,8 +127,8 @@ if(!is.null(config["groupfile", 2]) & !is.na(config["groupfile", 2])) {
 groups <- read.table(grouptable,sep = "\t", 
                      as.is = T, header = T, strip.white = TRUE, quote = "")
 
-#Read model definitions from a table in a file
-#Assumes tab-delimited (e.g. saved from Excel)
+## Read model definitions from a table in a file
+## Assumes tab-delimited
 if(!is.null(config["modelfile", 2]) & !is.na(config["modelfile", 2])) {
   modeltable = file.path(getOption("gtxpipe.clinical"), config["modelfile",2])
 } else {
@@ -116,9 +138,13 @@ if(!is.null(config["modelfile", 2]) & !is.na(config["modelfile", 2])) {
 models <- read.table(modeltable, 
                      na.strings=c('NA',''),colClasses="character", sep = "\t", 
                      as.is = T, header = T, strip.white = TRUE, quote = "", fill = TRUE)
+
+## Identify which variables are required from model statements
 models$deps <- unlist(lapply(models$model, function(str){
                       s1<- unlist(strsplit(str, split="[(~+,)]"))
                       return (paste(s1[grep(".", s1, fixed = T)], collapse = " ", sep =""))}))
+
+## Read in cvlist values and convert missing to empty strings
 for (i in 1:nrow(models)) {
   if (!is.na(models[i,"cvlist"])) {
     models[i,"cvlist"] = paste(read.table(file.path(getwd(), "input", models[i,"cvlist"]), stringsAsFactors = FALSE, fill = TRUE)[ , 1], collapse = " ")
@@ -131,8 +157,10 @@ for (i in 1:nrow(models)) {
     models[i,"groups"] = ""
   }
 }
-models <- models[c("analysis","deps",  "model",	"groups",	"contrasts","cvlist")]
-names(models) <- c("model", "deps", "fun", "groups", "contrasts","cvlist")
+
+## Reorder and re-label columns to match what expected by gtxpipe
+models <- models[c("analysis", "deps", "model", "groups", "contrasts", "cvlist")]
+names(models) <- c("model", "deps", "fun", "groups", "contrasts", "cvlist")
 
 
 ## Determine if user has specified stop.before.make
@@ -143,7 +171,7 @@ if(!is.null(config["stop.before.make", 2]) & !is.na(config["stop.before.make", 2
 }
 
 
-gtxpipe(gtxpipe.derivations = rbind(derivations.standard.IDSL, deriv),
+gtxpipe(gtxpipe.derivations = rbind(derivations.standard.IDSL, derivs),
         gtxpipe.groups = groups,
         gtxpipe.models = models, 
         gtxpipe.eigenvec = config["eigenvec",2],
