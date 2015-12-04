@@ -64,10 +64,19 @@ options(gtxpipe.genotypes = config["genotypes",2])
 
 ## Set the make command to use for executing the chunk analysis jobs
 
-## To use distributed parallel make (SGE) with 100 threads on GSK systems,
-options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
+## To use distributed parallel make (SGE) with 400 threads on GSK systems,
+options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 400", sep=""))
 ## Same as above but an extra level of output for debugging
 #options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v ", '-v SGE_DEBUG_LEVEL=\"3 0 0 0 0 0 0 0\"', " R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
+## explanation of SGE options
+## -v PATH to inherit current PATH in each job
+## -v R_LIBS_USER to specify where packages are
+## -cwd to use current working dir as working dir for each job
+## -l qname= to specify queue (unclear why using this queue - is it just carryover from use of this queue for imputation?)
+## -l arch= to specify what types of machines (unclear if this is also just carryover from imputation where the minimac executable could only run on certain machines)
+## -l mt=3G to specify 3GB memory required for each job (this is guesstimate based on prior tests of pipeline but may need to be increased for larger datasets)
+## -- separates SGE options from options passed to make
+## -j 400 max number of parallel jobs - a standard genome-wide imputation will have 406 chunks so there will be ~400 jobs per model/group. In theory, should be no problems maxing this out at a very high number as SGE will just "pend" any jobs over the current system/user capacity.
 
 ## Parallel make with 4 threads on the current host:
 ## Note, this approach has not been fully tested and configured (e.g. specifying R_LIBS_USER)
