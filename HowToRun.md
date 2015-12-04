@@ -89,7 +89,7 @@ The most common example would be an SNV and indel with the same coordinate where
 Another example would be if you have standard imputed data for ```SNP``` ```1:1000``` in ```chr1chunk1.info.gz``` and are creating ```chr1assayed.info.gz``` to capture assayed genotypes where the ```SNP``` value for the variant at position 1000 should be something like ```1:1000:assayed```.
 
 #### <a name ="Missing">Missingness</a>
-Currently the pipeline does not handle missing doses.
+Currently the pipeline does not handle missing doses. This is the reason that assayed genotypes are not currently merged into the imputed doses because NoCall genotypes are expected. See the [issue](https://github.com/tobyjohnson/gtx/issues/1) in the gtx package for progres on this.
 
 #### <a name="SubjectIDs">Subject IDs</a>
 Subject IDs (first column of dose file) should be of the form ```USUBJID->USUBJID``` where USUBJID is the same value specified in the clinical data (see Prepare clincal data below). Order does not matter.
@@ -204,7 +204,7 @@ It is a good idea to check that the pipeline is interpretting your configuration
 ```
 stop.before.make=TRUE
 ```
-in [config.txt](#config). Then [submit](#Submit) and the job should finish in a few minutes so you can quickly [review](#Review). If everything looks good, reset
+in [config.txt](#config). Then [submit](#Submit) and the job should finish in a few minutes so you can quickly [review](#Review) except the final report won't exist. Instead, you can inspect the analysis-dataset.csv file in each of the analysis/group directories in ```Analysis/analyses``` which includes the model statement, candidate variant list, and the relevant processed endpoints & covariates. And you can check the options.R file in these same directories which include the high-level (cross-analysis) options specified in [config.txt](#config). The other file that may be in these directories is CV.bed which contains a 500kb flank of the candidate variantsIf everything looks good, reset
 ```
 #stop.before.make=TRUE
 ```
@@ -219,7 +219,7 @@ where ```Label``` is a short job label that will be used to monitor progress, ``
 ```
 Your job NNNNNNN ("Label") has been submitted
 ```
-where NNNNNN is the job ID.
+where NNNNNN is the job ID. This script will create ```gtx.out``` and ```gtx.err``` in ```/path/to/share/StudyID/Analysis```.
 
 
 
@@ -266,7 +266,7 @@ The first thing to check is that this file exists and contains 3 tables (groups,
 If anything seems wrong with the contents of this report but the exit status was 0, then it will require some investigation as the cause is likely in the source data / analysis setup.
 
 ### <a name="GroupResults">Analysis/Group results</a>
-If everything executed as expected, then you should find the following files in each analysis/group directory:
+If everything executed as expected, then you should find the following files in each analysis/group directory in ```Analysis/analyses```:
 
 ```ALL.out.txt.gz```: Results for all variants passing the MAF and Rsq filtering criteria and all candidate variants.
 
