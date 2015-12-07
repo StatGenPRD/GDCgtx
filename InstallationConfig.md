@@ -24,9 +24,11 @@ When an administrator does wish to update the controlled instance, this script c
 ```
 
 
-### R Dependencies
-The gtx pipeline requires several R packages and will optionally use others as available.  These are currently not controlled but instead installed in the "local" R3 instance at 
+### R Version & Dependencies
+We have opted to use the "local" R3 instance at
 ```
 GDC: /GWD/appbase/projects/statgen/R3.0.0/R-3.0.0
 ```
-In lieu of controlling these, we will report the versions used in the log of each run.
+because it was compiled with cairo graphics enabled which makes generation of high density plots (e.g. QQ and Manhattan) relatively fast. In order to use the "central" R2.14 instance (/GWD/bioinfo/tools/bin/R64-2.14.0) which was not compiled with cairo graphics enabled, a local install of the Cairo package would need to be referenced or else the gtx pipeline will default to PDF for plotting which will be very slow for high density plots and create very large files that are difficult to open.
+
+The gtx pipeline requires several R packages and will optionally use others as available (e.g. Cairo, knitr). These are currently not controlled but instead installed in the "local" R3 instance. In lieu of controlling these, we **will** report the versions used in the log of each run. Note, currently these are not logged - proposed change [here](https://github.com/tobyjohnson/gtx/issues/3).
