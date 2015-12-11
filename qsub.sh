@@ -11,4 +11,4 @@ qsub -N $LABEL -q dl580 -b y -m e -M $EMAIL -l mt=3G \
 -o $WORKSPACE/gtx.out \
 -i /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/tableinput.R \
 /GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/qsub_Rcall.sh \
-$WORKSPACE/input/config.txt
+$WORKSPACE
