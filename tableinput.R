@@ -13,10 +13,10 @@ if (length(args) >=1) {
 } else {
   stop("Please input [working directory]")
 }
-file.config = file.path(work.dir,"input/config.txt")
+file.config = file.path(work.dir,"input/config.txt") 
 
 # print strating time and config file path to stdout
-print (paste(Sys.time(), "Loading", file.config))
+message(Sys.time(), ": Loading", file.config)
 
 # Read config file as list of key-value pairs separated by =
 config <- read.table(file.config, sep ="=", as.is = T, strip.white = TRUE,stringsAsFactors = FALSE, quote = "")
@@ -35,6 +35,8 @@ setwd(work.dir)
 options(gtxpipe.project = config["project", 2])
 options(gtxpipe.user = config["user", 2])
 options(gtxpipe.email = config["email", 2])
+
+options(gtxpipe.packages = c("ordinal", "survival")) # added by Li Li
 
 
 ## Get location of gtx library and load
@@ -65,7 +67,7 @@ options(gtxpipe.genotypes = config["genotypes",2])
 ## Set the make command to use for executing the chunk analysis jobs
 
 ## To use distributed parallel make (SGE) with 400 threads on GSK systems,
-options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 400", sep=""))
+options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=12G -- -j 400", sep=""))
 ## Same as above but an extra level of output for debugging
 #options(gtxpipe.make = paste("/GWD/bioinfo/projects/lsf/SGE/6.2u5/bin/lx24-amd64/qmake -cwd -v PATH -v ", '-v SGE_DEBUG_LEVEL=\"3 0 0 0 0 0 0 0\"', " R_LIBS_USER=", gtxloc, " -l qname=dl580 -l arch=lx24-amd64 -l mt=3G -- -j 100", sep=""))
 ## explanation of SGE options
