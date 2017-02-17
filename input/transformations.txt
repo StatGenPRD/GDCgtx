@@ -1,0 +1,6 @@
+#this file is optional
+#targets (required): name of variable after transformation. 			
+#fun(required): transformation function. Example: "zise()" for normal quantile transformation
+#deps: name of variables used in the model. Variables named as Data.var will be added automatically. PCs should not be listed. 			
+targets	fun	deps
+blaltINV	zise(residuals(lm(Pheno.blalt ~ demo.AGE + demo.SEX)))	
