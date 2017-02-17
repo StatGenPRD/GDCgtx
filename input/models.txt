@@ -1,7 +1,9 @@
-analysis	model	groups	cvlist	contrasts
-Baseline	lm(Pheno.blalt ~ demo.AGE + demo.SEX)	All	cvlist.txt	
-SafetyQTA1	lm(Pheno.log10maxalt ~ 1)	Placebo Drug	cvlist.txt	Drug/Placebo
-SafetyQTA2	lm(Pheno.log10maxalt ~ Pheno.blalt + demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo
-SafetyCC	glm(Pheno.altcc ~ 1, family="binomial")	Drug	cvlist.txt	Drug/Placebo Drug/All
-Efficacy1	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ 1)		cvlist.txt	Drug/Placebo
-Efficacy2	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo
+analysis	model	groups	cvlist	contrasts	P_threshold_gwas	P_threshold_cv	deps
+Baseline	lm(Pheno.blalt ~ demo.AGE + demo.SEX)	All	cvlist.txt		5.00E-02	1.00E-01	
+BaselineINV	lm(blaltINV ~ 1)	All	cvlist.txt		5.00E-02	1.00E-01	blaltINV
+SafetyQTA1	lm(Pheno.log10maxalt ~ 1)	Placebo Drug	cvlist.txt	Drug/Placebo			
+SafetyQTA2	lm(Pheno.log10maxalt ~ Pheno.blalt + demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo	5.00E-02		
+SafetyCC	glm(Pheno.altcc ~ 1, family="binomial")	Drug	cvlist.txt	Drug/Placebo Drug/All		0.1	
+Efficacy1	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ 1)		cvlist.txt	Drug/Placebo			
+Efficacy2	coxph(Surv(Pheno.SRVMO, Pheno.SRVCFLCD) ~ demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo			
+NegBinomialTest	glm.nb(Pheno.SRVMO ~ demo.AGE + demo.SEX)	Drug	cvlist.txt	Drug/Placebo	5.00E-02	1.00E-01	
