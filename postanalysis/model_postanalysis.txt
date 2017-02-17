@@ -1,0 +1,9 @@
+analysis	groups	varlist	contrasts
+Baseline	All	postanalysis/SigVar_list.txt	
+BaselineINV	All	postanalysis/SigVar_list.txt	
+SafetyQTA1	Placebo Drug	postanalysis/SigVar_list.txt	Drug/Placebo
+SafetyQTA2	Drug	postanalysis/SigVar_list.txt	Drug/Placebo
+SafetyCC	Drug	postanalysis/SigVar_list.txt	Drug/Placebo Drug/All
+Efficacy1		postanalysis/SigVar_list.txt	Drug/Placebo
+Efficacy2	Drug	postanalysis/SigVar_list.txt	Drug/Placebo
+NegBinomialTest	Drug	postanalysis/SigVar_list.txt	Drug/Placebo

@@ -1,0 +1,49 @@
+########
+## config file for post-analysis data processing and plotting
+## Output (default): merged clinical and dosage data
+## Output (if option plot = T): Region plot, Pheno by geno plot
+## Input: please provide papameters listed below
+########
+
+##project label for use in reports
+project=ABC123456
+
+#analyst name & e-mail for use in reports
+user=XXX
+email=XXX
+
+
+#absolute path to your study directory where analysis were run
+#LD and dosage data will be saved under subfolder "data"
+#Combined clinical/geno data and plots will be saved under subfolder subfolder "data"
+dir=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis
+
+#absolute path to directory with all *.dose.gz and *.info.gz files including HIBAG results
+genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/imputed-20120314
+
+#absolute path to file listing subjects for LD calculation, no header, ID as first column
+#Empty, NA or NULL: all subjects will be used for LD calculation
+ldsubjects=NULL
+
+#absolute path to file listing analysis, groups, varlist, contrasts as columns
+#analysis: name of analysis corresponding to your original analysis
+#groups: one or multiple groups for the named analysis
+#varlist: file with absolute path or under dir listing variants for plotting etc
+postanalysis=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/Analysis/postanalysis/model_postanalysis.txt
+
+#generate plots under subfolder "plot"
+plot=TRUE
+#flanking region size in bp
+flanking=100000 
+
+# Marker filters
+threshold.MAF=0.01
+threshold.Rsq=0.01
+
+#use GC adjusted results (TRUE) or not (FALSE)
+GC=TRUE
+
+#chunk size for imputation data
+#7 for 1000G phase 1 imputation, 4 for phase 3 imputation
+chunkMb=7
+
