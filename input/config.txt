@@ -22,7 +22,9 @@ genotypes=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC12345
 #You may omit these by commenting out the line but beware that this is the only "view" into the genetic data prior to running the chunk analyses
 #And therefore, the subject demographic summaries (which are calculated before the chunk analyses) will report PGxITT as ITT which is almost certainly false.
 eigenvec=/GWD/appbase/projects/statgen/GXapp/G-P_assoc_pipeline/GDCgtx/ABC123456/AnalysisReadyData/genotypes/ABC123456-pca.eigenvec
-
+#If numeric value (1, 2....), this number of PCs will be added by default as covariates for all analyses
+#If NA or 0, PCs will NOT be added as covariates
+No.PCs=0
 
 ## ANALYSIS CONFIGURATION
 
@@ -49,11 +51,11 @@ threshold.Rsq=0.01
 
 
 ##names of the expected input files if not the defaults
-#phenofile=Pheno_alt.txt
-#varfile=variables_new.txt
-#groupfile=groups_old.txt
-#modelfile=models_justone.txt
-
+#phenofile=Pheno.txt
+#varfile=variables.txt
+#groupfile=groups.txt
+#modelfile=models.txt
+#transformationfile=transformations.txt
 
 ##Absolute path to gtx package if other than default (e.g. if testing a new feature in latest version of package before the default controlled instance has been upgraded)
 #gtxloc=/path/to/R/lib
@@ -61,4 +63,6 @@ threshold.Rsq=0.01
 
 ##Stop before running chunk analyses to allow inspection of setup
 #stop.before.make=TRUE
+
+
 
