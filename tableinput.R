@@ -167,7 +167,8 @@ models$deps <- unlist(lapply(1:nrow(models), function(idx){
 ## Read in cvlist values and convert missing to empty strings
 for (i in 1:nrow(models)) {
   if (!is.na(models[i,"cvlist"])) {
-    models[i,"cvlist"] = paste(read.table(file.path(getwd(), "input", models[i,"cvlist"]), stringsAsFactors = FALSE, fill = TRUE)[ , 1], collapse = " ")
+    models[i,"cvlist"] = paste(read.table(file.path(getwd(), "input", models[i,"cvlist"]), stringsAsFactors = FALSE, fill = TRUE, 
+                                         header = F, sep ="\t")[ , 1], collapse = " ")
   }
   #Need to convert NA values to empty strings else parse attempts in gtxpipe function will fail
   if (is.na(models[i,"contrasts"]) || is.null(models[i,"contrasts"])) {
